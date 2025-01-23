@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.o2gdm.o2gdmcore.mapper.target.TargetMapper">
+
+	<!-- 更新新网关信息 -->
+	<insert id="insertTableData">
+		insert into ${tabelName}(
+			id ,
+			systemCode ,
+			name ,
+			groupCode ,
+			uri ,
+			path ,
+			method ,
+			fallbackTimeout ,
+			replenishRate ,
+			burstCapacity ,
+			status ,
+			is_jwt ,
+			stripPrefix,
+			createTime,
+			updateTime,
+			service,
+			proxy_mode,
+			app_enabled,
+			redirectTo,
+			create_user,
+			is_data_center)
+		<foreach collection="list" separator=" UNION ALL " item="item">
+			select #{item.id,jdbcType=VARCHAR},
+			       #{item.id,jdbcType=VARCHAR},
+			       #{item.name,jdbcType=VARCHAR},
+			       'public_api',
+			       #{item.uri,jdbcType=VARCHAR},
+				   CONCAT(CONCAT( '/', #{item.service,jdbcType=VARCHAR}), #{item.path,jdbcType=VARCHAR} ),
+				   #{item.method,jdbcType=VARCHAR},
+				   0,
+				   20,
+                   100,
+			       #{item.is_deleted,jdbcType=VARCHAR},
+			       1,
+			       #{item.stripPrefix,jdbcType=VARCHAR},
+			       sysdate,
+			       sysdate,
+			       #{item.service,jdbcType=VARCHAR},
+			       #{item.proxy_mode,jdbcType=VARCHAR},
+			       #{item.app_enabled,jdbcType=VARCHAR},
+			       #{item.redirectTo,jdbcType=VARCHAR},
+			       #{item.create_user,jdbcType=VARCHAR},
+			       #{item.is_data_center,jdbcType=VARCHAR}
+			from dual
+		</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,100 @@
+server:
+  port: 8083
+  undertow:
+    io-threads: 8              # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    worker-threads: 128         # 阻塞任务线程池, 它的值设置取决于系统线程执行任务的阻塞系数，默认值是IO线程数*8
+    buffer-size: 1024           # buffer用于服务器连接的IO操作, 每块buffer的空间大小,越小的空间被利用越充分
+    direct-buffers: true        # 是否分配的直接内存(NIO直接分配的堆外内存)
+
+source:
+  dataSource:
+#    username: sems
+#    password: neusoft1234QWER
+    username: semstest
+    password: neusoft
+    url: jdbc:oracle:thin:@localhost:1521/orcl
+    driver-class-name: oracle.jdbc.OracleDriver
+target:
+  dataSource:
+    schemaName: tp_sems
+    url: jdbc:opengauss://10.100.32.105:8000/dgzhjy?currentSchema=tp_sems
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: org.opengauss.Driver
+    username: root
+    password: 1qaz@WSX3
+#    username: semstest
+#    password: neusoft
+#    url: jdbc:oracle:thin:@localhost:1521/orcl
+#    driver-class-name: oracle.jdbc.OracleDriver
+
+#------------------
+# spring
+#------------------
+spring:
+  application:
+    name: o2gdm
+  # 数据源配置
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    username: root
+#    password: Pwd_2019
+#    url: jdbc:mysql://localhost:3306/flying_fish_gateway_dm?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    druid:
+#      initial-size: 50
+#      min-idle: 10
+#      max-active: 300
+#      max-wait: 60000
+#      time-between-eviction-runs-millis: 60000
+#      min-evictable-idle-time-millis: 300000
+#      validation-query: SELECT 1 FROM DUAL
+#      test-while-idle: true
+#      test-on-borrow: false
+#      test-on-return: false
+#      pool-prepared-statements: true
+#      max-pool-prepared-statement-per-connection-size: 20
+#      filters: stat,wall
+#      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#      web-stat-filter:
+#        enabled: true
+#      stat-view-servlet:
+#        enabled: true
+#  redis: #网关redis配置
+#    host: localhost
+#    port: 6379
+#    password: neusoft1234QWER
+#    database: 8               #网关db配置
+#    jedis:
+#      pool:
+##        max-active: 8
+#        max-total: 8
+##        max-wait: -1ms
+##        max-wait-millis: -1ms
+#        max-idle: 8
+#        min-idle: 0
+#    timeout: 3000ms
+
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath*:mapper/*/*.xml
+  type-aliases-package: com.tp.o2gdm.o2gdmcore.entity
+
+logging:
+  level:
+    root: info
+    com.tp.o2gdm.o2gdmcore: warn
+  file:
+      #    path: ./logs/${spring.application.name}   # path和name设置一个即可，name的优先级高
+      name: logs/${spring.application.name}.log
+
+management:
+  health:
+    redis:
+      enabled: false
+  endpoints:
+    logfile:
+      external-file: logs/${spring.application.name}.log
+    web:
+      exposure:
+        include: "*"

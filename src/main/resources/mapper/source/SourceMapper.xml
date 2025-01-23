@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tp.o2gdm.o2gdmcore.mapper.source.SourceMapper">
+
+	<!-- 获取oracle所有表信息 -->
+	<select id="getAllTableList" resultType="java.util.Map" parameterType="string">
+		SELECT TABLE_NAME ROM from user_tables
+	</select>
+
+	<!-- 根据表明获取oracle所有表数据 -->
+	<select id="getTableDataList" resultType="java.util.Map" parameterType="string">
+		SELECT TABLE_NAME ROM from ${tableName}
+	</select>
+</mapper>
